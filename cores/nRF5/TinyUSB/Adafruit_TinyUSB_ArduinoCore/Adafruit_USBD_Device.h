@@ -42,7 +42,7 @@ class Adafruit_USBD_Interface
 
 class Adafruit_USBD_Device
 {
-  private:
+  protected:
     enum { STRING_DESCRIPTOR_MAX = 8 };
 
     tusb_desc_device_t _desc_device;
@@ -87,7 +87,7 @@ class Adafruit_USBD_Device
     //------------- Platform Dependent APIs -------------//
     uint8_t getSerialDescriptor(uint16_t* serial_str);
 
-  private:
+  protected:
     uint16_t const* descriptor_string_cb(uint8_t index, uint16_t langid);
 
     friend uint8_t const * tud_descriptor_device_cb(void);

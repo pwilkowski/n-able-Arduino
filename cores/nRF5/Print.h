@@ -32,7 +32,7 @@
 
 class Print
 {
-  private:
+  protected:
     int write_error;
     size_t printNumber(unsigned long, uint8_t);
     size_t printFloat(double, uint8_t);

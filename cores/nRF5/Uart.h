@@ -49,7 +49,7 @@ class Uart : public HardwareSerial
 
     operator bool() { return true; }
 
-  private:
+  protected:
     NRF_UART_Type *nrfUart;
     RingBuffer rxBuffer;
 

@@ -47,8 +47,7 @@ void TwoWire::setPins(uint8_t pinSDA, uint8_t pinSCL)
   this->_uc_pinSCL = pinSCL;
 }
 
-void TwoWire::begin(void) {
-  //Master Mode
+void TwoWire::begin(uint32_t sdaCfg, uint32_t sclCfg) {
   master = true;
 
   NRF_GPIO_Type* portSCL = digitalPinToPort(_uc_pinSCL);
@@ -56,17 +55,8 @@ void TwoWire::begin(void) {
   uint32_t pinSCL = digitalPinToPin(_uc_pinSCL);
   uint32_t pinSDA = digitalPinToPin(_uc_pinSDA);
 
-  portSCL->PIN_CNF[pinSCL] = ((uint32_t)GPIO_PIN_CNF_DIR_Input       << GPIO_PIN_CNF_DIR_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect  << GPIO_PIN_CNF_INPUT_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup    << GPIO_PIN_CNF_PULL_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0D1     << GPIO_PIN_CNF_DRIVE_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos);
-
-  portSDA->PIN_CNF[pinSDA] = ((uint32_t)GPIO_PIN_CNF_DIR_Input       << GPIO_PIN_CNF_DIR_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect  << GPIO_PIN_CNF_INPUT_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup    << GPIO_PIN_CNF_PULL_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0D1     << GPIO_PIN_CNF_DRIVE_Pos)
-                            | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos);
+  portSCL->PIN_CNF[pinSCL] = sclCfg;
+  portSDA->PIN_CNF[pinSDA] = sdaCfg;
 
   _p_twim->FREQUENCY = TWIM_FREQUENCY_FREQUENCY_K100;
   _p_twim->ENABLE = (TWIM_ENABLE_ENABLE_Enabled << TWIM_ENABLE_ENABLE_Pos);
@@ -76,6 +66,22 @@ void TwoWire::begin(void) {
   NVIC_ClearPendingIRQ(_IRQn);
   NVIC_SetPriority(_IRQn, 2);
   NVIC_EnableIRQ(_IRQn);
+}
+
+void TwoWire::begin() {
+  uint32_t sclCfg = ((uint32_t)GPIO_PIN_CNF_DIR_Input       << GPIO_PIN_CNF_DIR_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect  << GPIO_PIN_CNF_INPUT_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup    << GPIO_PIN_CNF_PULL_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0D1     << GPIO_PIN_CNF_DRIVE_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos);
+
+  uint32_t sdaCfg =  ((uint32_t)GPIO_PIN_CNF_DIR_Input       << GPIO_PIN_CNF_DIR_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect  << GPIO_PIN_CNF_INPUT_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup    << GPIO_PIN_CNF_PULL_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0D1     << GPIO_PIN_CNF_DRIVE_Pos)
+                            | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos);
+
+  begin(sdaCfg, sclCfg);
 }
 
 void TwoWire::begin(uint8_t address) {

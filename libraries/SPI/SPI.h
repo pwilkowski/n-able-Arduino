@@ -49,7 +49,7 @@ class SPISettings {
   // Default speed set to 4MHz, SPI mode set to MODE 0 and Bit order set to MSB first.
   SPISettings() { init_AlwaysInline(4000000, MSBFIRST, SPI_MODE0); }
 
-  private:
+  protected:
   void init_MightInline(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) {
     init_AlwaysInline(clock, bitOrder, dataMode);
   }
@@ -109,7 +109,7 @@ class SPIClass {
   void setDataMode(uint8_t uc_mode);
   void setClockDivider(uint8_t uc_div);
 
-  private:
+  protected:
   void init();
   void config(SPISettings settings);
 

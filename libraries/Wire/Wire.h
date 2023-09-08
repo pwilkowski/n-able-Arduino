@@ -40,7 +40,10 @@ class TwoWire : public Stream
     TwoWire(NRF_TWI_Type * p_twi, uint8_t pinSDA, uint8_t pinSCL);
 #endif
     void setPins(uint8_t pinSDA, uint8_t pinSCL);
+
     void begin();
+    void begin(uint32_t sdaCfg, uint32_t sclCfg);
+
 #if defined(NRF52_SERIES)
     void begin(uint8_t);
 #endif
@@ -69,7 +72,7 @@ class TwoWire : public Stream
 
     using Print::write;
 
-  private:
+  protected:
 #if defined(NRF52_SERIES)
     NRF_TWIM_Type * _p_twim;
     NRF_TWIS_Type * _p_twis;
