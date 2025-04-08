@@ -83,6 +83,14 @@
 #define CONFIG_RTOS_TIMER_STACK_DEPTH (256)
 #endif
 
+#ifndef CONFIG_RTOS_USE_TRACE_FACILITY
+#define CONFIG_RTOS_USE_TRACE_FACILITY (0)
+#endif
+
+#ifndef CONFIG_RTOS_USE_STATS_FORMATTING_FUNCTIONS
+#define CONFIG_RTOS_USE_STATS_FORMATTING_FUNCTIONS (0)
+#endif
+
 
 #define configTICK_SOURCE                                                         FREERTOS_USE_RTC
 
@@ -121,8 +129,8 @@
 
 /* Run time and task stats gathering related definitions. */
 #define configGENERATE_RUN_TIME_STATS                                             0
-#define configUSE_TRACE_FACILITY                                                  0
-#define configUSE_STATS_FORMATTING_FUNCTIONS                                      0
+#define configUSE_TRACE_FACILITY                                                  CONFIG_RTOS_USE_TRACE_FACILITY
+#define configUSE_STATS_FORMATTING_FUNCTIONS                                      CONFIG_RTOS_USE_STATS_FORMATTING_FUNCTIONS
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES                                                     0
